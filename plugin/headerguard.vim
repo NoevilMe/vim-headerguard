@@ -9,6 +9,10 @@ if !exists('g:headerguard_use_cpp_comments')
     let g:headerguard_use_cpp_comments = 0
 endif
 
+if !exists('g:headerguard_add_underline')
+    let g:headerguard_add_underline= v:true
+endif
+
 " Save 'cpoptions' and set Vim default to enable line continuations.
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
@@ -30,7 +34,11 @@ function! s:Func(funcSuffix)
 endfunction
 
 function! s:HeaderguardName()
-    return toupper(expand('%:t:gs/[^0-9a-zA-Z_]/_/g'))
+    if g:headerguard_add_underline
+        return '__' . toupper(expand('%:t:gs/[^0-9a-zA-Z_]/_/g')) . '_'
+    else
+        return toupper(expand('%:t:gs/[^0-9a-zA-Z_]/_/g'))
+    endif
 endfunction
 
 function! s:HeaderguardLine1()
