@@ -13,6 +13,10 @@ if !exists('g:headerguard_add_underline')
     let g:headerguard_add_underline= v:true
 endif
 
+if !exists('g:headerguard_supported_extentions')
+    let g:headerguard_supported_extentions = ['h', 'hh', 'hpp', 'hxx', 'h++']
+endif
+
 " Save 'cpoptions' and set Vim default to enable line continuations.
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
@@ -61,6 +65,12 @@ function! g:HeaderguardAdd()
     " Test for empty filename.
     if expand('%') == ""
         echoerr "Empty filename (save file and try again)."
+        return
+    endif
+    " only for c++ header file
+    let ext = tolower(expand('%:e'))
+    if index(g:headerguard_supported_extentions, ext) == -1
+        echoerr "unsupported file extention."
         return
     endif
     " Locate first, second, and last pre-processor directives.
